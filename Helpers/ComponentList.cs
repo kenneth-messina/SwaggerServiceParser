@@ -27,7 +27,7 @@ namespace SwaggerServiceParser.Helpers
                 componentList.Add(new Component
                 {
                     Name = comps.Key,
-                    Parameters = comps.Value.Properties.Select(p => p.Key).ToArray()
+                    Parameters = comps.Value.Properties.Select(p => p.Key.ToCamelCase()).ToArray()
                 });
             }
             return componentList;

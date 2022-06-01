@@ -53,7 +53,7 @@ namespace SwaggerServiceParser.Helpers
                 using var jsonStream = new MemoryStream(Encoding.UTF8.GetBytes($"{{{parameterLines.ToString().Trim().Trim(',')}}}"));
                 HttpGetParameterContainer parameterContainer = await JsonSerializer.DeserializeAsync<HttpGetParameterContainer>(jsonStream);
 
-                _parameters = parameterContainer.Parameters.Select(p => p.Name).ToArray();
+                _parameters = parameterContainer.Parameters.Select(p => p.Name.ToCamelCase()).ToArray();
             }
 
             _endPoint = endpoint;

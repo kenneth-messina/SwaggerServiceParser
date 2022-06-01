@@ -1,12 +1,16 @@
-# JavaScript Service Generator
+# Introduction
 
-Run this script to automatically convert swagger's generated json into javascript services.
+## JavaScript Service Generator
 
-## API Service
+Run this script to automatically convert swagger's generated json into javascript services. The intended use would be to setup all api connections within the `appsettings.json` file and run as needed. The folder path locaitons can drop each set of api calls directly into the front end application's workspace.
+
+Swagger calls are grouped by controller into the same file and will be called [controller-name]Service.
+
+## API Service Assumption
 
 The generated files assume there exists another service for encapsulating the actual http calls for `GET`, `POST`, `PUT`, and `DELETE`. Adjust the `appsettings.json` file to reflect the location for this file relative to the service files destination.
 
-## Service Liss (appsettings.json)
+# Service List (appsettings.json)
 
 Use `appsettings.json` to confirgure the ServiceList so that each entry contains the following:
 
@@ -30,3 +34,17 @@ Example:
   }
 ]
 ```
+
+# Running the Code
+
+This assumes dotnet is installed. https://docs.microsoft.com/en-us/dotnet/core/tools/dotnet
+
+Either using a tool such as vscode or command line, navigate to the project and enter `dotnet build` into the command line. Once completed, successfully and appsettings.json is configured, enter `dotnet run` into the command line to run the application. Your files should generate.
+
+## Common Error
+
+Receiving a "404" could indicate your swagger file is unable to be found given the location entered in the appsettings.json file. Check the link is correct.
+
+# Using the Service Files
+
+Note the the objects are wrapped so that the intended use is for an object to be passed in utilizing the destructuring assignment. This should help communication regarding the naming of each variable.
