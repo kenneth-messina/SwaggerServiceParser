@@ -19,14 +19,14 @@ Example:
 ```json
 [
   {
-    "swagger": "http://officecomputer.local/my-api/swagger/v1/swagger.json",
-    "api-path": "/api/gateway",
-    "folder-path": "C:\\code\\app\\services\\"
+    "swagger": "http://deployed//api//account//swagger/v1/swagger.json",
+    "api-path": "/api/account",
+    "folder-path": "C:\\temp\\services\\"
   },
   {
     "swagger": "http://localhost:5000/swagger/v1/swagger.json",
-    "api-path": "/api/accounts",
-    "folder-path": "C:\\code\\app\\services\\"
+    "api-path": "/api/user",
+    "folder-path": "C:\\temp\\services\\"
   }
 ]
 ```
