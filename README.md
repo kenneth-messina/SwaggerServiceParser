@@ -44,7 +44,3 @@ Either using a tool such as vscode or command line, navigate to the project and 
 ## Common Error
 
 Receiving a "404" could indicate your swagger file is unable to be found given the location entered in the appsettings.json file. Check the link is correct.
-
-# Using the Service Files
-
-Note the the objects are wrapped so that the intended use is for an object to be passed in utilizing the destructuring assignment. This should help communication regarding the naming of each variable.
