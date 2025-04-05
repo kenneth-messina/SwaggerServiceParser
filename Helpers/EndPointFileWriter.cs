@@ -12,6 +12,7 @@ namespace SwaggerServiceParser.Helpers
     {
         private string[] _parameters { get; set; }
         private EndPoint _endPoint { get; set; }
+        private bool _isPostFromBody { get; set; }
         private string HttpCommand() { return EnumHelper.GetAttribute<EndPointAttribute>(_endPoint.EndPointType).Description; }
 
         private string GetParametersString(bool noBraketOverride = false)
@@ -37,11 +38,19 @@ namespace SwaggerServiceParser.Helpers
         {
             var lines = endpoint.Json.Split('\n');
 
-            if ((endpoint.EndPointType == EndPointType.Put || endpoint.EndPointType == EndPointType.Post) && endpoint.Json.Contains("\"requestBody\":"))
+            if ((endpoint.EndPointType == EndPointType.Put || endpoint.EndPointType == EndPointType.Post))
             {
-                var objName = lines.FirstOrDefault(l => l.Trim().StartsWith("\"$ref\":"));
-                if (objName != null && objName.Length > 0) _parameters = new string[] { objName = objName.Substring(objName.LastIndexOf('/') + 1).Trim().Trim('\"').ToCamelCase() };
-                if (lines.Any(l => l.Contains("multipart/form-data"))) _parameters = new string[] { "formData" };
+                if (endpoint.Json.Contains("\"requestBody\":"))
+                {
+                    var objName = lines.FirstOrDefault(l => l.Trim().StartsWith("\"$ref\":"));
+                    if (objName != null && objName.Length > 0) _parameters = new string[] { objName = objName.Substring(objName.LastIndexOf('/') + 1).Trim().Trim('\"').ToCamelCase() };
+                    if (lines.Any(l => l.Contains("multipart/form-data"))) _parameters = new string[] { "formData" };
+                    else if (objName == null || objName.Length == 0)
+                    {
+                        _isPostFromBody = true;
+                        _parameters = new string[] { "data" };
+                    }
+                }
             }
 
             if ((endpoint.EndPointType == EndPointType.Get || endpoint.EndPointType == EndPointType.Delete) && endpoint.Json.Contains("\"parameters\":"))
@@ -75,8 +84,9 @@ namespace SwaggerServiceParser.Helpers
             }
             else
             {
+                var fromBody = _isPostFromBody ? "Body" : "";
                 sb.AppendLine($"  async {_endPoint.Method}({GetParametersString(true)}) {{");
-                sb.AppendLine($"    return await apiSerivce.{HttpCommand().ToCamelCase()}(prefix + '{_endPoint.Method}', {GetParametersString()})");
+                sb.AppendLine($"    return await apiSerivce.{HttpCommand().ToCamelCase()}{fromBody}(prefix + '{_endPoint.Method}', {GetParametersString()})");
             }
             sb.AppendLine($"  }},");
             return sb.ToString();
